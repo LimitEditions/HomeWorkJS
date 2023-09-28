@@ -25,14 +25,12 @@ async function fetchData() {
 
 
     const addButton = document.querySelectorAll('.add-btn');
-    const hiden = document.querySelector('.hiden');
+    const basket = document.querySelector('.basket');
 
     addButton.forEach(element => {
       element.addEventListener('click', () => {
-        if (cartItems.length === 0) {
-          hiden.classList.add('hiden');
-        } else {hiden.classList.remove('hiden');
-      }
+        basket.classList.remove('hidden');
+
         element.textContent = 'OK';
         element.style.backgroundColor = "#ff6a6a";
         setTimeout(() => {
@@ -40,15 +38,17 @@ async function fetchData() {
           element.style.backgroundColor = "white";
         }, 1000);
 
-        cartItems.push(data[element.id]);
-        addCard(data[element.id]);
+        setTimeout(() => {
+          cartItems.push(data[element.id]);
+          addCard(data[element.id], element.id);
+        }, 100);
       })
 
-      function addCard(object) {
+      function addCard(object, id) {
         const itemBox = document.querySelector(".card-CartItems");
         const productItem = `
               <div class="product">
-              <button class="btn__del">Удалить</button>
+              <button class="btn__del" id="btn_del_${id}">Удалить</button>
               <div class="content">
                 <img class="product__img" src="${object.image}" alt="${object.title}" />
                 <div class="product__desc">
@@ -67,16 +67,15 @@ async function fetchData() {
             </div>`;
         itemBox.insertAdjacentHTML("beforeend", productItem);
 
-        const btns = document.querySelectorAll(".btn__del");
-        btns.forEach((el) => {
-          el.addEventListener("click", () => {
-            const product = el.closest(".product");
+        const btns = document.getElementById("btn_del_" + id);
+          btns.addEventListener("click", () => {
+            const product = btns.closest(".product");
             product.remove();
-            cartItems.splice(cartItems.indexOf(el), 1);
-          })
+            cartItems.splice(cartItems.indexOf(btns), 1);
+            if (cartItems.length === 0) {
+              basket.classList.add('hidden');
+            }
         })
-        // if (cartItems.length === 0) {
-        //   hiden.classList.add('hiden');
       }
     });
   } catch (error) {
