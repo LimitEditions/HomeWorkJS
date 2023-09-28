@@ -33,7 +33,6 @@ async function fetchData() {
           hiden.classList.add('hiden');
         } else {hiden.classList.remove('hiden');
       }
-        
         element.textContent = 'OK';
         element.style.backgroundColor = "#ff6a6a";
         setTimeout(() => {
@@ -84,5 +83,4 @@ async function fetchData() {
     console.error(error);
   }
 }
-
 fetchData();
